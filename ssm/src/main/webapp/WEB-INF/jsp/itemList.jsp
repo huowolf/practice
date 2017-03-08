@@ -44,8 +44,8 @@ overflow: hidden;
 </head> 
 <body> 
 <ul id="products"> 
-<c:forEach items="items" var="item">
-	<li><a href="#"><img src="${item.pic }" alt="${item.description }" width="120" height="100"/></a> 
+<c:forEach items="${items }" var="item">
+	<li><a href="#"><img src="${item.pic }" title="${item.description }" width="120" height="100"/></a> 
 		<span>${item.title }</br>
 			售价:${item.price }
 		</span> 

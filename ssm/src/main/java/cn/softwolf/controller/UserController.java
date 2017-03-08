@@ -26,7 +26,7 @@ public class UserController {
 	}
 	
 	@RequestMapping("/saveUserUI")
-	public String updateUserUI(Model model,Integer id) throws Exception{	
+	public String saveUserUI(Model model,Integer id) throws Exception{	
 		User user = userService.findUserById(id);
 		
 		//回显数据到页面

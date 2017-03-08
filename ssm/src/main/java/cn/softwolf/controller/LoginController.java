@@ -21,7 +21,7 @@ public class LoginController {
 		User user = userService.findUserByNameAndPwd(name, password);
 		if( user !=null){
 			session.setAttribute("user", user);
-			return "redirect:/findusers";
+			return "index";
 		}else{
 			model.addAttribute("error", "用户名或密码错误！");
 			return "login";

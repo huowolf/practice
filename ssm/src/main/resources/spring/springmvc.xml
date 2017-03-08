@@ -27,12 +27,15 @@
 
 	<mvc:default-servlet-handler />
 
+	<!-- 文件上传解析器 -->
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- 支持的最大文件大小，以字节为单位 -->
+		<property name="maxUploadSize" value="6291456" /> <!-- 6M -->
+	</bean>
+
 	<!--拦截器 -->
-	<mvc:interceptors>
-		<!--多个拦截器,顺序执行 -->
-		<mvc:interceptor>
-			<mvc:mapping path="/**" />
-			<bean class="cn.softwolf.interceptor.LoginInterceptor"></bean>
-		</mvc:interceptor>
-	</mvc:interceptors>
+	<!-- <mvc:interceptors> 多个拦截器,顺序执行 <mvc:interceptor> <mvc:mapping path="/**" 
+		/> <bean class="cn.softwolf.interceptor.LoginInterceptor"></bean> </mvc:interceptor> 
+		</mvc:interceptors> -->
 </beans>

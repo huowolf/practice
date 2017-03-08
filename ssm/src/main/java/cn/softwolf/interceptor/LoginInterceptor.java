@@ -13,7 +13,7 @@ public class LoginInterceptor implements HandlerInterceptor {
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
 		// 如果是登录页面则放行
-		if (request.getRequestURI().indexOf("login") >= 0) {
+		if (request.getRequestURI().indexOf("login") >= 0 || request.getRequestURI().indexOf("index") >= 0) {
 			return true;
 		}
 		HttpSession session = request.getSession();
