@@ -8,12 +8,12 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>保存菜品</title>
 <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
-<script type="text/javascript" src="${path}/js/jquery.form.js"></script>
+<script type="text/javascript" src="${base}/js/jquery.form.js"></script>
 <script type="text/javascript">
 		
 function submitUpload() {
 	var option = {
-		url : "{base}/uploadPic",
+		url : "${base}/uploadPic",
 		type: "post",
 		dataType : "json",
 		success : function(data) {
@@ -30,7 +30,7 @@ function submitUpload() {
 </head>
 <body>
 	<h1>保存菜品信息</h1>
-	<form method="post" action="${pageContext.request.contextPath }/saveItem">
+	<form id="form1" method="post" action="${pageContext.request.contextPath }/saveItem" enctype="multipart/form-data">
 	<input type="hidden" name="id" value="${item.id }"/>
 		<table width="80%" border=1>
 			<tr>
@@ -40,9 +40,9 @@ function submitUpload() {
 			<tr>
 				<td>菜品照片</td>
 				<td>
-					<img src="${item.pic }" width="120" height="100"/></br>
-					<input id="photo" type="file" value="${item.pic }">
-					<input type="hidden" id="reletivePath" name="pic" value="">
+					<img id="photo" src="${item.pic }" width="120" height="100"/></br>
+					<input  type="file" name="photo" onchange="submitUpload()" />
+					<input type="hidden" name="pic" id="reletivePath" value="${item.pic }" />
 				</td>
 			</tr>
 			<tr>

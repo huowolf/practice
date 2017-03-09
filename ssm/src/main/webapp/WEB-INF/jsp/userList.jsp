@@ -9,6 +9,15 @@
 <title>用户列表</title>
 </head>
 <body>
+	<form action="${base }/searchUser" method="post">
+		姓名：<input type="text" name="name" value="${userQuery.name }">  &nbsp;
+		性别：<input type="radio" name="sex" value="1" ${(userQuery.sex == 1)?"checked":""}/>男
+			<input type="radio" name="sex" value="0" ${(userQuery.sex == 0)?"checked":""}/>女    
+			<input type="radio" name="sex" value="-1" ${(userQuery.sex == -1)?"checked":""}/>所有  </br>
+		最小年龄：<input type="text" name="minAge" value="${userQuery.minAge }"/>
+		最大年龄：	<input type="text" name="maxAge" value="${userQuery.maxAge }"/></br>
+		<input type="submit" value="查询">
+	</form>
 	<h1>用户列表</h1>
 	<table width="80%" border="1" cellspacing="0"  cellpadding="0">
 		<tr>

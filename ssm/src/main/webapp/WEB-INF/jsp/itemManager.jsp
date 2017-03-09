@@ -9,6 +9,7 @@
 <title>菜品管理</title>
 </head>
 <body>
+	<a href="${base}/finditems">预览</a>
 	<h1>菜品列表</h1>
 	<table width="80%" border="1" cellspacing="0"  cellpadding="0">
 		<tr>
@@ -24,7 +25,7 @@
 				<td><img src="${item.pic }" width="120" height="100"/></td>
 				<td>${item.price}</td>	
 				<td>
-					<textarea rows="5" cols="20" >${item.description }</textarea>
+					${item.description }
 				</td>		
 				<td>
 					<a href="${base}/saveItemUI?id=${item.id}">修改</a> &nbsp;&nbsp;

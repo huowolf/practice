@@ -2,6 +2,7 @@ package cn.softwolf.service;
 
 import java.util.List;
 
+import cn.softwolf.dto.UserQuery;
 import cn.softwolf.pojo.User;
 
 public interface UserService {
@@ -12,6 +13,8 @@ public interface UserService {
 	public void UpdateUser(User user);
 	
 	public List<User> selectAllUser();
+	
+	public List<User> selectUserByExample(UserQuery userQuery);
 	
 	public User findUserById(Integer id);
 	

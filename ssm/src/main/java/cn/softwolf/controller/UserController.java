@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import cn.softwolf.dto.UserQuery;
 import cn.softwolf.pojo.User;
 import cn.softwolf.service.UserService;
 
@@ -27,10 +28,11 @@ public class UserController {
 	
 	@RequestMapping("/saveUserUI")
 	public String saveUserUI(Model model,Integer id) throws Exception{	
-		User user = userService.findUserById(id);
+		if(id != null){
+			User user = userService.findUserById(id);
+			model.addAttribute("user", user);
+		}
 		
-		//回显数据到页面
-		model.addAttribute("user", user);
 		return "saveUserUI";
 	}
 	
@@ -50,5 +52,13 @@ public class UserController {
 			userService.UpdateUser(user);
 		}
 		return "redirect:findusers";
+	}
+	
+	@RequestMapping("/searchUser")
+	public String searchUser(UserQuery userQuery,Model model){
+		List<User> users = userService.selectUserByExample(userQuery);
+		model.addAttribute("users", users);
+		model.addAttribute("userQuery", userQuery);
+		return "userList";
 	}
 }

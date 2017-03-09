@@ -2,16 +2,21 @@ package cn.softwolf.controller;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.Random;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.WebResource;
+
 import net.sf.json.JSONObject;
 
 @Controller
@@ -22,7 +27,14 @@ public class UploadController {
 	
 	@RequestMapping("/uploadPic")
 	@ResponseBody
-	public String uploadPic(MultipartFile mf) throws Exception{
+	public String uploadPic(HttpServletRequest request) throws Exception{
+		MultipartHttpServletRequest mr = (MultipartHttpServletRequest) request;
+		Iterator<String> iter= mr.getFileNames();
+		//获得文件对应表单域input的name
+		String inputName = iter.next();
+		
+		//获得文件
+		MultipartFile mf = mr.getFile(inputName);
 		
 		//定义上传后的文件名字
 		String fileName = new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date());
