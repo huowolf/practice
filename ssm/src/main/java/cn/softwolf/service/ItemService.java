@@ -14,4 +14,10 @@ public interface ItemService {
 	public List<Item> selectAllItem();
 
 	public Item findItemById(Integer id);
+	
+	public List<Item> seachItems(String keywords) throws Exception;
+	
+	public void deleteIndex(Integer id) throws Exception;
+	
+	public void createOrUpdateIndex(Item item) throws Exception;
 }

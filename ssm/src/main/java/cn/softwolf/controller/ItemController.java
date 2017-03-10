@@ -62,15 +62,53 @@ public class ItemController {
 		}else{
 			itemService.UpdateItem(item);
 		}
+		//更新索引库、
+		try {
+			itemService.createOrUpdateIndex(item);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		return "redirect:itemManager";
 	}
 		
 	@RequestMapping("/deleteItem")
 	public String deleteItem(Integer id){
 		itemService.deleteItem(id);
+		
+		//删除索引库
+		try {
+			itemService.deleteIndex(id);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return "redirect:itemManager";
 	}
 	
+	
+	@RequestMapping("/searchItem")
+	public String searchItem(String keyword,Model model){
+		try {
+			List<Item> items = itemService.seachItems(keyword);
+			
+			for (Item item : items) {
+				item = this.changePic(item);
+			}
+			
+			model.addAttribute("items", items);
+			model.addAttribute("keyword", keyword);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return "itemManager";
+	}
+	
+	/**
+	 * 将图片的相对地址拼接成绝对地址
+	 * @param item
+	 * @return
+	 */
 	private Item changePic(Item item){
 		String pic = item.getPic();
 		if(!pic.contains("http:")&& pic!=null && !pic.equals("")){

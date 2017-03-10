@@ -11,6 +11,10 @@
 <body>
 	<a href="${base}/finditems">预览</a>
 	<h1>菜品列表</h1>
+	<form action="${base}/searchItem" type="post" >
+		<input type="text" name="keyword" value="${keyword }">
+		<input type="submit" value="搜索一下">
+	</form>
 	<table width="80%" border="1" cellspacing="0"  cellpadding="0">
 		<tr>
 			<th>菜名</th>

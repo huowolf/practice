@@ -18,7 +18,7 @@ public class LoginInterceptor implements HandlerInterceptor {
 		}
 		HttpSession session = request.getSession();
 		// 如果用户已登录也放行
-		if (session.getAttribute("user") != null) {
+		if (session.getAttribute("userInfo") != null) {
 			return true;
 		}
 		// 用户没有登录跳转到登录页面

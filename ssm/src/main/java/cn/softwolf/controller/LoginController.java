@@ -20,7 +20,7 @@ public class LoginController {
 	public String login(HttpSession session,String name,String password,Model model){
 		User user = userService.findUserByNameAndPwd(name, password);
 		if( user !=null){
-			session.setAttribute("user", user);
+			session.setAttribute("userInfo", user);
 			return "index";
 		}else{
 			model.addAttribute("error", "用户名或密码错误！");

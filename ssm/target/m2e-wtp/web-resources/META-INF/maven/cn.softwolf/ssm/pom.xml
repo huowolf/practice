@@ -8,6 +8,11 @@
 	<name>ssm Maven Webapp</name>
 	<url>http://maven.apache.org</url>
 
+	<properties>
+		<jcseg.version>2.1.0</jcseg.version>
+	</properties>
+
+
 	<dependencies>
 		<!-- spring-webmvc -->
 		<dependency>
@@ -119,6 +124,27 @@
 			<version>2.4</version>
 			<classifier>jdk15</classifier>
 		</dependency>
+
+		<!-- 第三方中文分组组件 -->
+		<dependency>
+			<groupId>org.lionsoul</groupId>
+			<artifactId>jcseg-core</artifactId>
+			<version>${jcseg.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.lionsoul</groupId>
+			<artifactId>jcseg-analyzer</artifactId>
+			<version>${jcseg.version}</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>org.apache.solr</groupId>
+			<artifactId>solr-solrj</artifactId>
+			<version>5.5.0</version>
+		</dependency>
+
 	</dependencies>
 	<build>
 		<finalName>ssm</finalName>

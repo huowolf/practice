@@ -76,11 +76,13 @@ public class UserServiceImpl implements UserService {
 		if(userQuery.getName() != null){
 			criteria.andNameLike("%"+userQuery.getName()+"%");
 		}
-		if(userQuery.getSex() == 1){//男
-			criteria.andSexEqualTo((byte)1);
-		}
-		if(userQuery.getSex() == 0){//女
-			criteria.andSexEqualTo((byte)0);
+		if(userQuery.getSex() != null){
+			if(userQuery.getSex() == 1){//男
+				criteria.andSexEqualTo((byte)1);
+			}
+			if(userQuery.getSex() == 0){//女
+				criteria.andSexEqualTo((byte)0);
+			}
 		}
 		if(userQuery.getMinAge() != null){
 			criteria.andAgeGreaterThanOrEqualTo(userQuery.getMinAge());

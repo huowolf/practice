@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import cn.softwolf.mapper.ItemMapper;
 import cn.softwolf.pojo.Item;
+import cn.softwolf.search.SearchDao;
 import cn.softwolf.service.ItemService;
 
 @Service
@@ -14,6 +15,8 @@ public class ItemServiceImpl implements ItemService {
 
 	@Autowired
 	private ItemMapper itemMapper;
+	@Autowired
+	private SearchDao searchDao;
 	
 	@Override
 	public void insertItem(Item item) {
@@ -43,6 +46,24 @@ public class ItemServiceImpl implements ItemService {
 	public Item findItemById(Integer id) {
 		Item item = itemMapper.selectByPrimaryKey(id);
 		return item;
+	}
+
+	@Override
+	public List<Item> seachItems(String keywords) throws Exception {
+		List<Item> items = searchDao.searchItem(keywords);
+		return items;
+	}
+
+	@Override
+	public void deleteIndex(Integer id) throws Exception {
+		searchDao.deleteIndex(id);
+		
+	}
+
+	@Override
+	public void createOrUpdateIndex(Item item) throws Exception {
+		searchDao.createOrUpdateIndex(item);
+		
 	}
 
 }

@@ -99,7 +99,7 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="cn.softwolf.pojo.Item" >
+  <insert id="insert" parameterType="cn.softwolf.pojo.Item" useGeneratedKeys="true" keyProperty="id">
     insert into item (id, description, title, 
       pic, price)
     values (#{id,jdbcType=INTEGER}, #{description,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, 
