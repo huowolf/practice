@@ -145,6 +145,11 @@
 			<version>5.5.0</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>3.8</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<finalName>ssm</finalName>

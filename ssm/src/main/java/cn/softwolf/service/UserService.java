@@ -2,6 +2,8 @@ package cn.softwolf.service;
 
 import java.util.List;
 
+import javax.servlet.ServletOutputStream;
+
 import cn.softwolf.dto.UserQuery;
 import cn.softwolf.pojo.User;
 
@@ -19,4 +21,6 @@ public interface UserService {
 	public User findUserById(Integer id);
 	
 	public User findUserByNameAndPwd(String name,String password);
+	
+	public void exportExcel(String [] titles,ServletOutputStream outputStream);  
 }
