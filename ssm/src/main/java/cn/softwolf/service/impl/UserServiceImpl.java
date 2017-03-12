@@ -138,7 +138,12 @@ public class UserServiceImpl implements UserService {
   
                 cell = bodyRow.createCell(1);  
                 cell.setCellStyle(bodyStyle);  
-                cell.setCellValue(user.getSex());  
+                if(user.getSex() == 1){
+                	 cell.setCellValue("男");
+                }else{
+                	cell.setCellValue("女");
+                }
+                 
   
                 cell = bodyRow.createCell(2);  
                 cell.setCellStyle(bodyStyle);  

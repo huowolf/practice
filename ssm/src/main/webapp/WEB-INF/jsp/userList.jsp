@@ -19,6 +19,11 @@
 		<input type="submit" value="查询">
 	</form>
 	<h1>用户列表</h1>
+	<form action="${base}/importUser" method="post" enctype="multipart/form-data">
+		<input type="file" name="execl">
+		<input type="submit" value="导入数据">
+	</form>
+	<a href="${base }/exportUser">导出数据</a>
 	<table width="80%" border="1" cellspacing="0"  cellpadding="0">
 		<tr>
 			<th>用户编号</th>
@@ -40,7 +45,7 @@
 			</tr>
 		
 		</c:forEach>
-		<a href="${base}/saveUserUI">添加用户</a>
 	</table>
+	<a href="${base}/saveUserUI">添加用户</a>
 </body>
 </html>

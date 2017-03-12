@@ -1,15 +1,28 @@
 package cn.softwolf.controller;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import cn.softwolf.dto.UserQuery;
 import cn.softwolf.pojo.User;
 import cn.softwolf.service.UserService;
+import cn.softwolf.util.ExportUtil;
 
 @Controller
 public class UserController {
@@ -60,5 +73,72 @@ public class UserController {
 		model.addAttribute("users", users);
 		model.addAttribute("userQuery", userQuery);
 		return "userList";
+	}
+	
+	@RequestMapping("exportUser")
+	public void exportUser(HttpServletResponse response){
+		response.setContentType("application/vnd.ms-excel; charset=utf-8");  
+        try  
+        {  
+            ServletOutputStream outputStream = response.getOutputStream();  
+            response.setHeader("Content-disposition", "attachment; filename=user.xlsx");// 组装附件名称和格式   
+            String[] titles = { "姓名", "性别", "年龄","密码" };  
+            userService.exportExcel(titles, outputStream);  
+        }  
+        catch (IOException e)  
+        {  
+            e.printStackTrace();  
+        }  
+	}
+	
+	@RequestMapping("importUser")
+	public String exportUser(MultipartFile execl){
+	        if (execl == null)  
+	        {  
+	            return null;  
+	        }  
+	        try  
+	        {  
+	            InputStream input = execl.getInputStream();  
+	            XSSFWorkbook workBook = new XSSFWorkbook(input);  
+	            XSSFSheet sheet = workBook.getSheetAt(0);  
+	            if (sheet != null)  
+	            {  
+	                for (int i = 1; i < sheet.getPhysicalNumberOfRows(); i++)  
+	                {  
+	                    XSSFRow row = sheet.getRow(i);  
+	                    /*for (int j = 0; j < row.getPhysicalNumberOfCells(); j++)  
+	                    {  
+	                        XSSFCell cell = row.getCell(j);  
+	                        String cellStr = cell.toString();  
+	                        System.out.print("【"+cellStr+"】 ");  
+	                    }  
+	                    System.out.println();*/ 
+	                    
+	                    String name = ExportUtil.getValue(row.getCell(0));
+	                    String sex = ExportUtil.getValue(row.getCell(1));
+	                    String age = row.getCell(2).toString();
+	                    String password = ExportUtil.getValue(row.getCell(3));
+	                    
+	                    User user = new User();
+	                    user.setName(name);
+	                    user.setAge(Integer.parseInt(age));
+	                    user.setPassword(password);
+	                    if(sex.equals("男")){
+	                    	user.setSex((byte)1);
+	                    }else{
+	                    	user.setSex((byte)0);
+	                    }
+	                    userService.insertUser(user);
+	                }  
+	  
+	            }  
+	        }  
+	        catch (Exception e)  
+	        {  
+	            e.printStackTrace();  
+	        }  
+	        
+	        return "redirect:findusers";
 	}
 }
