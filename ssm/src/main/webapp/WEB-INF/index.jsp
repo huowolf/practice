@@ -12,7 +12,7 @@
 	<%
 	   // 重定向到首页
 	   response.setStatus(response.SC_MOVED_TEMPORARILY);
-	   response.setHeader("Location", "${base}/index"); 
+	   response.setHeader("Location", ${base}/index); 
 	%>
 </body>
 </html>

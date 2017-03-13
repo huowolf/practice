@@ -23,5 +23,4 @@ public interface UserService {
 	public User findUserByNameAndPwd(String name,String password);
 	
 	public void exportExcel(String [] titles,ServletOutputStream outputStream);  
-	
 }

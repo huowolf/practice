@@ -5,10 +5,8 @@ import java.io.InputStream;
 import java.util.List;
 
 import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -17,12 +15,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import cn.softwolf.dto.UserQuery;
 import cn.softwolf.pojo.User;
 import cn.softwolf.service.UserService;
-import cn.softwolf.util.ExportUtil;
 
 @Controller
 public class UserController {
@@ -99,7 +95,7 @@ public class UserController {
 	        }  
 	        try  
 	        {  
-	            InputStream input = execl.getInputStream();  
+ 	            InputStream input = execl.getInputStream();  
 	            XSSFWorkbook workBook = new XSSFWorkbook(input);  
 	            XSSFSheet sheet = workBook.getSheetAt(0);  
 	            if (sheet != null)  
@@ -107,22 +103,16 @@ public class UserController {
 	                for (int i = 1; i < sheet.getPhysicalNumberOfRows(); i++)  
 	                {  
 	                    XSSFRow row = sheet.getRow(i);  
-	                    /*for (int j = 0; j < row.getPhysicalNumberOfCells(); j++)  
-	                    {  
-	                        XSSFCell cell = row.getCell(j);  
-	                        String cellStr = cell.toString();  
-	                        System.out.print("【"+cellStr+"】 ");  
-	                    }  
-	                    System.out.println();*/ 
 	                    
-	                    String name = ExportUtil.getValue(row.getCell(0));
-	                    String sex = ExportUtil.getValue(row.getCell(1));
+	                    String name = row.getCell(0).toString();
+	                    String sex = row.getCell(1).toString();
 	                    String age = row.getCell(2).toString();
-	                    String password = ExportUtil.getValue(row.getCell(3));
+	                    String password = row.getCell(3).toString();
+	                    
 	                    
 	                    User user = new User();
 	                    user.setName(name);
-	                    user.setAge(Integer.parseInt(age));
+	                    user.setAge((int)Double.parseDouble(age));
 	                    user.setPassword(password);
 	                    if(sex.equals("男")){
 	                    	user.setSex((byte)1);
