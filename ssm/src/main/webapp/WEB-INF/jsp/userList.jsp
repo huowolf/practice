@@ -6,6 +6,11 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" type="text/css" href="${base }/jquery-easyui/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="${base }/jquery-easyui/themes/icon.css">
+<script type="text/javascript" src="${base }/jquery-easyui/jquery.min.js"></script>
+<script type="text/javascript" src="${base }/jquery-easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="${base }/jquery-easyui/locale/easyui-lang-zh_CN.js"></script>
 <title>用户列表</title>
 </head>
 <body>

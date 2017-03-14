@@ -14,6 +14,7 @@
         http://www.springframework.org/schema/mvc  
         http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
+
 	<context:property-placeholder location="classpath:resource.properties" />
 
 	<!-- 自动扫描 -->
@@ -27,8 +28,6 @@
 		<property name="suffix" value=".jsp" />
 	</bean>
 
-	<mvc:default-servlet-handler />
-
 	<!-- 文件上传解析器 -->
 	<bean id="multipartResolver"
 		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
@@ -40,7 +39,11 @@
 	<mvc:interceptors>
 		<mvc:interceptor>
 			<mvc:mapping path="/**" />
-			<bean class="cn.softwolf.interceptor.LoginInterceptor"></bean>
+			<mvc:exclude-mapping path="/static/**"/>
+			<bean class="cn.softwolf.interceptor.LoginInterceptor">
+			</bean>
 		</mvc:interceptor>
 	</mvc:interceptors>
+	
+	<mvc:default-servlet-handler />
 </beans>
