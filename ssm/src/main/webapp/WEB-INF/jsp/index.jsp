@@ -12,5 +12,9 @@
 	<a href="${base}/findusers">用户列表</a></br>
 	<a href="${base}/finditems">菜品列表</a></br>
 	<a href="${base}/itemManager">菜品管理</a></br>
+	
+	----------------------------------------------
+	使用HTTPClient调用后台菜品数据：</br>
+	<a href="${base}/itemList">菜品列表</a></br>
 </body>
 </html>

@@ -8,7 +8,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>保存菜品</title>
 <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
-<script type="text/javascript" src="${base}/js/jquery.form.js"></script>
+<script type="text/javascript" src="${base}/static/js/jquery.form.js"></script>
 <script type="text/javascript">
 		
 function submitUpload() {

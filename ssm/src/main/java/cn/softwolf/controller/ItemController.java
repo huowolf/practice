@@ -7,9 +7,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.softwolf.pojo.Item;
+import cn.softwolf.restful.ItemRestService;
 import cn.softwolf.service.ItemService;
+import cn.softwolf.service.StaticPageService;
+import net.sf.json.JSONArray;
 
 
 @Controller
@@ -20,7 +24,14 @@ public class ItemController {
 	@Autowired 
 	private ItemService itemService;
 	
+	@Autowired
+	private StaticPageService staticPageService;
+	
+	@Autowired
+	private ItemRestService ItemRestService;
+	
 	@RequestMapping("/finditems")
+	@ResponseBody
 	public String findAllItems(Model model) throws Exception{
 		List<Item> items = itemService.selectAllItem();
 		
@@ -28,8 +39,7 @@ public class ItemController {
 			item = this.changePic(item);
 		}
 		
-		model.addAttribute("items", items);	
-		return "itemList";
+		return JSONArray.fromObject(items).toString();
 	}
 	
 	@RequestMapping("/itemManager")
@@ -65,6 +75,13 @@ public class ItemController {
 		//更新索引库、
 		try {
 			itemService.createOrUpdateIndex(item);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		//生成静态页
+		try {
+			staticPageService.createHtml(item.getId());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -115,5 +132,13 @@ public class ItemController {
 			item.setPic(fileServer + item.getPic());
 		}	
 		return item;
+	}
+	
+	
+	@RequestMapping("/itemList")
+	public String itemList(Model model){		
+		List<Item> items = ItemRestService.getAllItems();
+		model.addAttribute("items", items);
+		return "itemManager";
 	}
 }

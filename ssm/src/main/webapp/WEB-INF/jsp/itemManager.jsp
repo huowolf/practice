@@ -32,6 +32,7 @@
 					${item.description }
 				</td>		
 				<td>
+					<a href="/html/${item.id}.html">查看详情</a> &nbsp;&nbsp;
 					<a href="${base}/saveItemUI?id=${item.id}">修改</a> &nbsp;&nbsp;
 					<a href="${base}/deleteItem?id=${item.id}">删除</a>
 				</td>
