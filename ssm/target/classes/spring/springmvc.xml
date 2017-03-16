@@ -19,7 +19,13 @@
 	<!-- 自动扫描 -->
 	<context:component-scan base-package="cn.softwolf.controller"></context:component-scan>
 	<!-- 注解驱动 -->
-	<mvc:annotation-driven></mvc:annotation-driven>
+	<mvc:annotation-driven>
+		<mvc:message-converters>
+            <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+                <constructor-arg value="UTF-8" />
+            </bean>
+        </mvc:message-converters>
+	</mvc:annotation-driven>
 	<!-- 视图解析器 -->
 	<bean
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">

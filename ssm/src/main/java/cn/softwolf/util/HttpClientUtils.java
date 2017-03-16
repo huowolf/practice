@@ -1,113 +1,124 @@
 package cn.softwolf.util;
 
-import java.io.IOException;
-import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.BasicResponseHandler;
-import org.apache.http.impl.client.HttpClients;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
 
 public class HttpClientUtils {
-    /**
-     * 初始化HttpClient
-     */
-    private static HttpClient httpClient = null;
-    /**
-     * 生产HttpClient实例
-     * 公开，静态的工厂方法，需要使用时才去创建该单体
-     *
-     * @return
-     */
-    public static HttpClient getHttpClient() {
-        if (httpClient == null) {
-            httpClient = HttpClients.createDefault();
-        }
-        return httpClient;
-    }
-    /**
-     * POST方式调用
-     *
-     * @param url
-     * @param params 参数为NameValuePair键值对对象
-     * @return 响应字符串
-     * @throws java.io.UnsupportedEncodingException
-     */
-    public static String executeByPOST(String url, List<NameValuePair> params) {
-        HttpClient httpclient = getHttpClient();
-        HttpPost post = new HttpPost(url);
+	 private static final CloseableHttpClient httpClient;
+	    public static final String CHARSET = "UTF-8";
 
-        ResponseHandler<String> responseHandler = new BasicResponseHandler();
-        
-        String responseJson = null;
-        try {
-            if (params != null) {
-                post.setEntity(new UrlEncodedFormEntity(params));
-            }
-            responseJson = httpclient.execute(post, responseHandler);
-        } catch (ClientProtocolException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            httpclient.getConnectionManager().closeExpiredConnections();
-        }
-        return responseJson;
-    }
-    /**
-     * Get方式请求
-     *
-     * @param url    带参数占位符的URL，例：
-     * @param params 参数值数组，需要与url中占位符顺序对应
-     * @return 响应字符串
-     * @throws java.io.UnsupportedEncodingException
-     */
-    public static String executeByGET(String url, Object[] params) {
-        HttpClient httpclient = getHttpClient();
-        String messages = MessageFormat.format(url, params);
-        HttpGet get = new HttpGet(messages);
-        ResponseHandler<String> responseHandler = new BasicResponseHandler();
-        String responseJson = null;
-        try {
-            responseJson = httpclient.execute(get, responseHandler);
-            
-            responseJson = new String(responseJson.getBytes("GBK"),"UTF-8");
-            
-        } catch (ClientProtocolException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+	    static {
+	        RequestConfig config = RequestConfig.custom().setConnectTimeout(60000).setSocketTimeout(15000).build();
+	        httpClient = HttpClientBuilder.create().setDefaultRequestConfig(config).build();
+	    }
 
-        } finally {
-            httpclient.getConnectionManager().closeExpiredConnections();
-        }
-        return responseJson;
-    }
-    /**
-     * @param url
-     * @return
-     */
-    public static String executeByGET(String url) {
-        HttpClient httpclient = getHttpClient();
-        HttpGet get = new HttpGet(url);
-        ResponseHandler<String> responseHandler = new BasicResponseHandler();
-        String responseJson = null;
-        try {
-            responseJson = httpclient.execute(get, responseHandler);
-        } catch (ClientProtocolException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            httpclient.getConnectionManager().closeExpiredConnections();
-        }
-        return responseJson;
-    }
+	    public static String doGet(String url, Map<String, String> params){
+	        return doGet(url, params,CHARSET);
+	    }
+	    public static String doPost(String url, Map<String, String> params){
+	        return doPost(url, params,CHARSET);
+	    }
+	    /**
+	     * HTTP Get 获取内容
+	     * @param url  请求的url地址 ?之前的地址
+	     * @param params	请求的参数
+	     * @param charset	编码格式
+	     * @return	页面内容
+	     */
+	    public static String doGet(String url,Map<String,String> params,String charset){
+	    	if(StringUtils.isBlank(url)){
+	    		return null;
+	    	}
+	    	try {
+	    		if(params != null && !params.isEmpty()){
+	    			List<NameValuePair> pairs = new ArrayList<NameValuePair>(params.size());
+	    			for(Map.Entry<String,String> entry : params.entrySet()){
+	    				String value = entry.getValue();
+	    				if(value != null){
+	    					pairs.add(new BasicNameValuePair(entry.getKey(),value));
+	    				}
+	    			}
+	    			url += "?" + EntityUtils.toString(new UrlEncodedFormEntity(pairs, charset));
+	    		}
+	    		HttpGet httpGet = new HttpGet(url);
+	    		CloseableHttpResponse response = httpClient.execute(httpGet);
+	    		int statusCode = response.getStatusLine().getStatusCode();
+	    		if (statusCode != 200) {
+	    			httpGet.abort();
+	    			throw new RuntimeException("HttpClient,error status code :" + statusCode);
+	    		}
+	    		HttpEntity entity = response.getEntity();
+	    		String result = null;
+	    		if (entity != null){
+	    			result = EntityUtils.toString(entity, "utf-8");
+	    		}
+	    		EntityUtils.consume(entity);
+	    		response.close();
+	    		return result;
+	    	} catch (Exception e) {
+	    		e.printStackTrace();
+	    	}
+	    	return null;
+	    }
+	    
+	    /**
+	     * HTTP Post 获取内容
+	     * @param url  请求的url地址 ?之前的地址
+	     * @param params	请求的参数
+	     * @param charset	编码格式
+	     * @return	页面内容
+	     */
+	    public static String doPost(String url,Map<String,String> params,String charset){
+	    	if(StringUtils.isBlank(url)){
+	    		return null;
+	    	}
+	    	try {
+	    		List<NameValuePair> pairs = null;
+	    		if(params != null && !params.isEmpty()){
+	    			pairs = new ArrayList<NameValuePair>(params.size());
+	    			for(Map.Entry<String,String> entry : params.entrySet()){
+	    				String value = entry.getValue();
+	    				if(value != null){
+	    					pairs.add(new BasicNameValuePair(entry.getKey(),value));
+	    				}
+	    			}
+	    		}
+	    		HttpPost httpPost = new HttpPost(url);
+	    		if(pairs != null && pairs.size() > 0){
+	    			httpPost.setEntity(new UrlEncodedFormEntity(pairs,CHARSET));
+	    		}
+	    		CloseableHttpResponse response = httpClient.execute(httpPost);
+	    		int statusCode = response.getStatusLine().getStatusCode();
+	    		if (statusCode != 200) {
+	    			httpPost.abort();
+	    			throw new RuntimeException("HttpClient,error status code :" + statusCode);
+	    		}
+	    		HttpEntity entity = response.getEntity();
+	    		String result = null;
+	    		if (entity != null){
+	    			result = EntityUtils.toString(entity, "utf-8");
+	    		}
+	    		EntityUtils.consume(entity);
+	    		response.close();
+	    		return result;
+	    	} catch (Exception e) {
+	    		e.printStackTrace();
+	    	}
+	    	return null;
+	    }
 }
 

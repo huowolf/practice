@@ -31,7 +31,6 @@ public class ItemController {
 	private ItemRestService ItemRestService;
 	
 	@RequestMapping("/finditems")
-	@ResponseBody
 	public String findAllItems(Model model) throws Exception{
 		List<Item> items = itemService.selectAllItem();
 		
@@ -39,7 +38,8 @@ public class ItemController {
 			item = this.changePic(item);
 		}
 		
-		return JSONArray.fromObject(items).toString();
+		model.addAttribute("items", items);
+		return "itemList";
 	}
 	
 	@RequestMapping("/itemManager")
@@ -133,12 +133,41 @@ public class ItemController {
 		}	
 		return item;
 	}
+
+	
+	/**
+	 * 发布菜品列表服务接口，供第三方调用
+	 * @return
+	 * @throws Exception
+	 */
+	/*
+	 * @ResponseBody返回中文数据时，会出现中文乱码问题,
+	 * 解决方案：配置mvc:message-converters
+	 */
+	@RequestMapping("/findItemsRest")
+	@ResponseBody
+	public String findAllItems() throws Exception{
+		List<Item> items = itemService.selectAllItem();
+		
+		for (Item item : items) {
+			item = this.changePic(item);
+		}
+		
+		return JSONArray.fromObject(items).toString();
+	}
 	
 	
+	/**
+	 * 调用HttpClient得到的服务数据，将数据加载到页面
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping("/itemList")
 	public String itemList(Model model){		
 		List<Item> items = ItemRestService.getAllItems();
 		model.addAttribute("items", items);
-		return "itemManager";
+		return "itemList";
 	}
+	
+	
 }

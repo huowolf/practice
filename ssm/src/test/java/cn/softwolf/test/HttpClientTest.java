@@ -12,10 +12,18 @@ public class HttpClientTest {
 
 	@Test
 	public void getAllItemTest(){
-		String result = HttpClientUtils.executeByGET("http://localhost:8080/ssm/finditems",null);
+		String result = HttpClientUtils.doGet("http://localhost:8080/ssm/findItemsRest",null);
 		
 		JSONArray jsonArray = JSONArray.fromObject(result);
-		List<Item> items = (List<Item>) JSONArray.toCollection(jsonArray);
+		List<Item> items = (List<Item>) JSONArray.toCollection(jsonArray,Item.class);
+		System.out.println(items);
+	}
+	
+	public static void main(String[] args) {
+		String result = HttpClientUtils.doGet("http://localhost:8080/ssm/findItemsRest",null);
+		
+		JSONArray jsonArray = JSONArray.fromObject(result);
+		List<Item> items = (List<Item>) JSONArray.toCollection(jsonArray,Item.class);
 		System.out.println(items);
 	}
 	
